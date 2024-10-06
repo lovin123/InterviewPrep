@@ -69,7 +69,7 @@ async function main() {
         ],
     })
 
-    console.log("Questions and tags inserted successfully")
+    console.log("Questions and tags inserted successfully. quitting")
 }
 
 main()
