@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  desc                  String?
+  difficulty            Difficulty
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  connectionToQuestions ConnectionToQuestions[]
+  questionTag           QuestionTag             @relation(fields: [questionTagId], references: [id])
+  questionTagId         Int
+}
+
+model QuestionTag {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  questions Question[]
+}
+
+model User {
+  id                 String                  @id
+  email              String                  @unique
+  completedQuestions ConnectionToQuestions[]
+}
+
+model ConnectionToQuestions {
+  connnectionId Int    @id @default(autoincrement())
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String
+
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
+
+  status Status
+}
+
+enum Status {
+  favorite
+  completed
+}
+
+enum Difficulty {
+  hard
+  medium
+  easy
+}
